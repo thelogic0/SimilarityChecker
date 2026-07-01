@@ -6,13 +6,31 @@ using std::string;
 class SimilarityChecker {
 public:
     static constexpr double MAX_LENGTH_SCORE = 60.0;
+    static constexpr double ZERO_SCORE = 0.0;
 
 	double getScore(string param1, string param2) {
+        if (!(isValidInput(param1) && isValidInput(param2))) {
+            return ZERO_SCORE;
+        }
+
         return getLengthScore(param1, param2) + getCharacterScore(param1, param2);
 	}
 
 private:
-    double getLengthScore(const string& param1, const string& param2) {
+    bool isValidInput(const string& param) const {
+        if (!param.size()) {
+            return false;
+        }
+        for (char c : param) {
+            if (!isupper(c)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    double getLengthScore(const string& param1, const string& param2) const {
         size_t len1 = param1.length();
         size_t len2 = param2.length();
 
@@ -27,6 +45,6 @@ private:
     }
 
     double getCharacterScore(const string& param1, const string& param2) {
-        return 0.0;
+        return ZERO_SCORE;
     }
 };
