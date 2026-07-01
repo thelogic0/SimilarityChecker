@@ -25,7 +25,7 @@ private:
             return false;
         }
         for (char c : param) {
-            if (!isupper(c)) {
+            if (!isupper((unsigned char)c)) {
                 return false;
             }
         }
@@ -65,10 +65,6 @@ private:
 
         size_t totalCnt = unionSet.size();
         size_t sameCnt = interSet.size();
-
-        if (totalCnt == 0) {
-            return 0.0;
-        }
 
         return ((double)sameCnt / totalCnt) * MAX_ALPHA_SCORE;
     }
