@@ -1,19 +1,22 @@
 #include <iostream>
 #include <algorithm>
+#include <set>
 
 using std::string;
+using std::set;
 
 class SimilarityChecker {
 public:
     static constexpr double MAX_LENGTH_SCORE = 60.0;
+    static constexpr double MAX_ALPHA_SCORE = 40.0;
     static constexpr double ZERO_SCORE = 0.0;
 
-	double getScore(string param1, string param2) {
+	double getScore(const string& param1, const string& param2) const {
         if (!(isValidInput(param1) && isValidInput(param2))) {
             return ZERO_SCORE;
         }
 
-        return getLengthScore(param1, param2) + getCharacterScore(param1, param2);
+        return getLengthScore(param1, param2) + getAlphaScore(param1, param2);
 	}
 
 private:
@@ -44,7 +47,29 @@ private:
         return (1.0 - (double)gap / shortLen) * MAX_LENGTH_SCORE;
     }
 
-    double getCharacterScore(const string& param1, const string& param2) {
-        return ZERO_SCORE;
+    double getAlphaScore(const string& param1, const string& param2) const {
+        set<char> set1(param1.begin(), param1.end());
+        set<char> set2(param2.begin(), param2.end());
+
+        set<char> unionSet = set1;
+        for (char c : set2) {
+            unionSet.insert(c);
+        }
+
+        set<char> interSet;
+        for (char c : set1) {
+            if (set2.count(c)) {
+                interSet.insert(c);
+            }
+        }
+
+        size_t totalCnt = unionSet.size();
+        size_t sameCnt = interSet.size();
+
+        if (totalCnt == 0) {
+            return 0.0;
+        }
+
+        return ((double)sameCnt / totalCnt) * MAX_ALPHA_SCORE;
     }
 };
