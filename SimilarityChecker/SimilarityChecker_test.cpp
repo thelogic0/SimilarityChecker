@@ -62,7 +62,7 @@ TEST_F(SimilarityCheckerFixture, LengthCheckHalf1)
 {
 	string param1 = "AAAAAA";
 	string param2 = "BBBB";
-	double ratio = 0.5;
+	double ratio = 1.0 - ((double)param1.size() - (double)param2.size()) / (double)param2.size();
 
 	double actual = checker.getScore(param1, param2);
 	EXPECT_EQ(MAX_LEN_SCORE * ratio, actual);
@@ -72,7 +72,7 @@ TEST_F(SimilarityCheckerFixture, LengthCheckHalf2)
 {
 	string param1 = "AAAA";
 	string param2 = "BBBBB";
-	double ratio = 0.75;
+	double ratio = 1.0 - ((double)param2.size() - (double)param1.size()) / (double)param1.size();
 
 	double actual = checker.getScore(param1, param2);
 	EXPECT_EQ(MAX_LEN_SCORE * ratio, actual);
